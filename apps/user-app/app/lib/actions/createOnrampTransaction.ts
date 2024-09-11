@@ -14,12 +14,29 @@ export async function createOnRampTransaction(amount: number, provider: string )
     }
     
     const token = (Math.random() * 1000).toString(); 
-    
-    
 
-    return {
-        message: "Success",
-    }
-      
+
+    try {
+        const response = await db.onRampTransaction.create({
+            data: {
+                status: "Processing",
+                token: token,
+                provider: (provider === "HDFC"? "HDFC": "ICICI"),
+                amount: amount*100,
+                startTime: new Date(),
+                userId: Number(session.user.id),
+            }
+        })
+        return {
+            token: response.token,
+            amount: response.amount,
+            userId: response.userId,
+        }
+    } catch (err) {
+        console.log(err);
+        return {
+            message: "Error Occured",
+        }
+    }      
 }
 

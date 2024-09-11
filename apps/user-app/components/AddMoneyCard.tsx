@@ -6,12 +6,13 @@ import { Select } from "@repo/ui/select";
 import { useState } from "react";
 import { TextInput } from "@repo/ui/text-input";
 import { createOnRampTransaction } from "../app/lib/actions/createOnrampTransaction";
+import axios from "axios";
 
 const SUPPORTED_BANKS = [{
-    name: "HDFC Bank",
+    name: "HDFC",
     redirectUrl: "https://netbanking.hdfcbank.com"
 }, {
-    name: "Axis Bank",
+    name: "ICICI",
     redirectUrl: "https://www.axisbank.com/"
 }];
 
@@ -22,7 +23,7 @@ export const AddMoney = () => {
     return <Card title="Add Money">
     <div className="w-full">
         <TextInput label={"Amount"} placeholder={"Amount"} onChange={(val) => {
-            setAmount(amount)
+            setAmount(Number(val))
         }} />
         <div className="py-4 text-left">
             Bank
@@ -37,8 +38,31 @@ export const AddMoney = () => {
         <div className="flex justify-center pt-4">
             <Button onClick={async () => {
                 const response = await createOnRampTransaction(amount, provider);
-                console.log(response);
                 {/*window.location.href = redirectUrl || "";*/}
+                
+                if (response.message === "Error occured" || response.message === "User doesn't exist") {
+                    alert("Error");
+                    console.log(response.message);
+                } else {
+                    let url = "";
+                    if (provider === "HDFC") {
+                        url = "http://localhost:5000/hdfcWebhook";
+                    } else {
+                        url = "http://localhost:5000/iciciWebhook";
+                    }
+
+                    axios.post(url, {
+                        token: response.token,
+                        userId: Number(response.userId),
+                        amount: Number(response.amount),
+                    }).then((res) => {
+                        console.log(res);
+                    }).catch((err) => {
+                        console.log(err);
+                    })
+                }
+
+                
             }}> 
             Add Money
             </Button>

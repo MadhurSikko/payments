@@ -22,10 +22,12 @@ async function getOnRampTransactions() {
     const session = await getServerSession(authOptions);
     const txns = await db.onRampTransaction.findMany({
         where: {
-            userId: Number(session?.user?.id)
+            userId: Number(session?.user?.id),
+            status: "Success",
         }
     });
     return txns.map(t => ({
+        id: t.id,
         time: t.startTime,
         amount: t.amount,
         status: t.status,

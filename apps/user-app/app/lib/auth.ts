@@ -41,9 +41,16 @@ export const authOptions = {
                         email: credentials.email,
                         name: credentials.name,
                         number: credentials.email,
-                        password: hashedPassword
+                        password: hashedPassword,
+                        Balance: {
+                            create: {
+                                locked: 0,
+                            }
+                        }
                     }
-                });
+                })
+
+                
 
                 return {
                     id: user.id.toString(),
