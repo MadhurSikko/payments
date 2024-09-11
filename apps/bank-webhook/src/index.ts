@@ -31,7 +31,8 @@ app.post("/hdfcWebhook", async (req, res) => {
 
             db.onRampTransaction.update({
                 where: {
-                    token: paymentInformation.token
+                    token: paymentInformation.token,
+                    userId: paymentInformation.userId,
                 },
                 data: {
                     status: "Success",
@@ -50,4 +51,14 @@ app.post("/hdfcWebhook", async (req, res) => {
             message: "Error while processing webhook"
         })
     }
+});
+
+app.get("/", (req, res) => {
+    return res.json({
+        message: "The webhook server works",
+    })
+})
+
+app.listen(5000, () => {
+    console.log("Listening on part: 5000");
 });
