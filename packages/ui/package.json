@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-"./transaction-successful": "./src/transaction-successful.tsx",
+    "./footer": "./src/footer.tsx",
+    "./transaction-successful": "./src/transaction-successful.tsx",
     "./text-input": "./src/text-input.tsx",
     "./select": "./src/select.tsx",
     "./centre": "./src/centre.tsx",

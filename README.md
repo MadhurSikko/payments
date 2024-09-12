@@ -69,6 +69,14 @@ Next, you can link your Turborepo to your Remote Cache by running the following 
 npx turbo link
 ```
 
+### env
+Add env file for packages/db/ with the database URL
+Add env file for apps/user-app/ with JWT_Secret and NEXTAUTH_URL
+
+### Prisma
+Run the following command after adding the .env file for prisma
+npm prisma migrate dev
+
 ## Useful Links
 
 Learn more about the power of Turborepo:
@@ -79,3 +87,5 @@ Learn more about the power of Turborepo:
 - [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
 - [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
 - [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+
+

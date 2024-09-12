@@ -40,7 +40,7 @@ export const authOptions = {
                     data: {
                         email: credentials.email,
                         name: credentials.name,
-                        number: credentials.email,
+                        number: credentials.number,
                         password: hashedPassword,
                         Balance: {
                             create: {
@@ -49,8 +49,6 @@ export const authOptions = {
                         }
                     }
                 })
-
-                
 
                 return {
                     id: user.id.toString(),

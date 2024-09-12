@@ -1,5 +1,5 @@
 "use client"
-import { useRouter } from 'next/navigation'
+
 import { Button } from "@repo/ui/button";
 import { Card } from "@repo/ui/card";
 import { Center } from "@repo/ui/centre";
@@ -12,10 +12,10 @@ export function SendCard() {
     const [number, setNumber] = useState("");
     const [amount, setAmount] = useState("");
     const[success, setSuccess] = useState(false);
-    const router = useRouter();
+    
     return <div className="h-[90vh]">
         
-        {success? <Center><TransactionSuccessful/></Center> : 
+        {success? <Center><TransactionSuccessful /></Center> : 
         <Center>
             <Card title="Send">
                 <div className="min-w-72 pt-2">

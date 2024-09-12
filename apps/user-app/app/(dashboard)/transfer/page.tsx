@@ -4,6 +4,7 @@ import { BalanceCard } from "../../../components/BalanceCard";
 import { OnRampTransactions } from "../../../components/OnRampTransaction";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
+import { redirect } from "next/navigation";
 
 async function getBalance() {
     const session = await getServerSession(authOptions);
@@ -36,6 +37,10 @@ async function getOnRampTransactions() {
 }
 
 export default async function() {  
+    const session = await getServerSession(authOptions);
+    if (!session) {
+        redirect("/")
+    }
     const balance = await getBalance();
     const transactions = await getOnRampTransactions();
 

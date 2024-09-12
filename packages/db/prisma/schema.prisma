@@ -15,6 +15,8 @@ model User {
   password    String
   Balance Balances[]
   OnRampTransaction OnRampTransaction[]
+  p2pSend p2pTransaction[] @relation("Sender")
+  p2pReciever p2pTransaction[] @relation("Reciever")
 }
 
 model Merchant {
@@ -41,6 +43,16 @@ model Balances {
   userId Int @unique
   locked Int
   user User @relation(fields: [userId], references: [id])
+}
+
+model p2pTransaction {
+  id Int @id @default(autoincrement())
+  amount Int
+  time DateTime @default(now())
+  fromId Int 
+  toId Int
+  fromUser User @relation("Sender", fields: [fromId], references: [id])
+  toUser User @relation("Reciever", fields: [toId], references: [id])
 }
 
 enum OnRampStatus {
