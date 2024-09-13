@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cors());
 
 app.post("/hdfcWebhook", async (req, res) => {
-    console.log("In the webhook server");
+    console.log("In the hdfc webhook");
     const paymentInformation: {
         token: string,
         userId: number,
@@ -58,6 +58,7 @@ app.post("/hdfcWebhook", async (req, res) => {
 });
 
 app.post("/iciciWebhook", async (req, res) => {
+    console.log("In the icici webhook");
     const paymentInformation: {
         token: string,
         userId: number,

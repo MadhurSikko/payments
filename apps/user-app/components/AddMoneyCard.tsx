@@ -7,6 +7,8 @@ import { useState } from "react";
 import { TextInput } from "@repo/ui/text-input";
 import { createOnRampTransaction } from "../app/lib/actions/createOnrampTransaction";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import { failOnRampTransaction } from "../app/lib/actions/failOnRampTransaction";
 
 const SUPPORTED_BANKS = [{
     name: "HDFC",
@@ -17,12 +19,13 @@ const SUPPORTED_BANKS = [{
 }];
 
 export const AddMoney = () => {
+    const router = useRouter();
     const [redirectUrl, setRedirectUrl] = useState(SUPPORTED_BANKS[0]?.redirectUrl);
     const [provider, setProvider] = useState(SUPPORTED_BANKS[0]?.name || "");
     const [amount, setAmount] = useState(0);
     return <Card title="Add Money">
     <div className="w-full">
-        <TextInput label={"Amount"} placeholder={"Amount"} onChange={(val) => {
+        <TextInput label={"Amount"} errorState={isNaN(amount)? true: false} error={"Enter a non zero value"} placeholder={"Amount"} onChange={(val) => {
             setAmount(Number(val))
         }} />
         <div className="py-4 text-left">
@@ -36,13 +39,12 @@ export const AddMoney = () => {
             value: x.name
         }))} />
         <div className="flex justify-center pt-4">
-            <Button onClick={async () => {
+            <Button disabledStatus={isNaN(amount) || amount <= 0? true: false} onClick={async () => {
                 const response = await createOnRampTransaction(amount, provider);
                 {/*window.location.href = redirectUrl || "";*/}
                 
-                if (response.message === "Error occured" || response.message === "User doesn't exist") {
-                    alert("Error");
-                    console.log(response.message);
+                if (response.hasOwnProperty('error')) {
+                    alert(response.message);
                 } else {
                     let url = "";
                     if (provider === "HDFC") {
@@ -55,8 +57,15 @@ export const AddMoney = () => {
                         token: response.token,
                         userId: Number(response.userId),
                         amount: Number(response.amount),
-                    }).then((res) => {
+                    }).then(async (res) => {
                         console.log(res);
+                        console.log(res.data);
+                        if (res.data.message === "Captured") {
+                            router.push("/dashboard");
+                        } else {
+                            await failOnRampTransaction(response.token, Number(response.userId));
+                            alert("Transaction Failed");
+                        }
                     }).catch((err) => {
                         console.log(err);
                     })

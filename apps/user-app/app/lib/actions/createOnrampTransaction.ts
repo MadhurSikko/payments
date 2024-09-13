@@ -6,9 +6,24 @@ import { authOptions } from "../auth";
 
 export async function createOnRampTransaction(amount: number, provider: string ) {
     const session = await getServerSession(authOptions);
-    
+
+    if (amount <= 0) {
+        return {
+            error: "error",
+            message: "Enter a positive value",
+        }
+    }
+
+    if (!(provider === "HDFC" || provider === "ICICI")) {
+        return {
+            error: "error",
+            message: "Invalid bank input",
+        }
+    }
+
     if (!session) {
         return {
+            error: "error",
             message: "User doesn't exist",
         }
     }
@@ -28,6 +43,7 @@ export async function createOnRampTransaction(amount: number, provider: string )
             }
         })
         return {
+            message: "Success",
             token: response.token,
             amount: response.amount,
             userId: response.userId,
@@ -35,6 +51,7 @@ export async function createOnRampTransaction(amount: number, provider: string )
     } catch (err) {
         console.log(err);
         return {
+            error: "error",
             message: "Error Occured",
         }
     }      
