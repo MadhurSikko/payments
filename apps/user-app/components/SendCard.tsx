@@ -27,12 +27,9 @@ export function SendCard() {
                     }} />
                     <div className="pt-4 flex justify-center">
                         <Button disabledStatus={isNaN(amount) || amount < 0? true: false} onClick={async () => {
+                            console.log(number);
                             const response = await p2pTransfer(number, Number(amount)*100); 
-                            if (response.message === 'Success') {
-                                setSuccess(true);
-                            } else {
-                                alert(response.message);
-                            }
+                            console.log(response);
                         }}>Send</Button>
                     </div>
                 </div>

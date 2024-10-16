@@ -11,7 +11,7 @@ export async function p2pTransfer(to: string, amount: number) {
             message: "Error while sending"
         }
     }
-    const toUser = await prisma.user.findFirst({
+    const toUser = await prisma.user.findUnique({
         where: {
             number: to
         }
@@ -40,6 +40,16 @@ export async function p2pTransfer(to: string, amount: number) {
               await tx.balances.update({
                 where: { userId: toUser.id },
                 data: { amount: { increment: amount } },
+              });
+
+              await tx.p2pTransaction.create({
+                data: {
+                    amount: amount,
+                    time: new Date(),
+                    fromId: from,
+                    toId: toUser.id,
+
+                }
               });
         });
 
